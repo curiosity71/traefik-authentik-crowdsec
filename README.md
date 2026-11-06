@@ -251,6 +251,29 @@ docker-compose.yml        Root-Datei, die die Fragmente zusammenführt
 first_install.sh          Interaktive Erstinstallation
 ```
 
+## CrowdSec AppSec: HTTP/3 erlauben
+
+Der Stack enthält eine eigene CRS-Plugin-Regel, die HTTP/3 in der vorhandenen
+Protokollprüfung zulässt. Das Installationsskript kopiert
+`data/crowdsec/crs-plugins/custom/http-version-before.conf` bei der Einrichtung
+nach `data/crowdsec/data/crs-plugins/custom/http-version-before.conf`.
+Dieses Ziel liegt im persistenten Datenverzeichnis, das Compose nach
+`/var/lib/crowdsec/data` einbindet. Vorhandene lokale Plugin-Dateien werden
+vom Setup nicht überschrieben.
+
+Die Regel `900230` setzt `tx.allowed_http_versions` auf
+`HTTP/1.0 HTTP/1.1 HTTP/2 HTTP/2.0 HTTP/3 HTTP/3.0`. Sie wird über den
+CRS-Wildcard-Include für `*-before.conf` vor
+`REQUEST-901-INITIALIZATION.conf` geladen. Dadurch bleibt die CRS-Regel
+`920430` aktiv und prüft weiterhin Protokollversionen. Voraussetzung ist,
+dass die CrowdSec CRS-Konfiguration die Wildcards
+`crs-plugins/*/*-config.conf` und `crs-plugins/*/*-before.conf` enthält.
+
+Nach einem Update des Repositorys kann die Installation mit
+`./scripts/setup.sh` aktualisiert werden; eine bereits angepasste lokale
+Plugin-Datei bleibt dabei erhalten. Anschließend CrowdSec neu starten, damit
+AppSec die Datei neu lädt.
+
 ## Weiterführende Links
 
 - [Traefik-Dokumentation](https://doc.traefik.io/traefik/)
