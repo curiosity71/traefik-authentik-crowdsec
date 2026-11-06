@@ -55,6 +55,7 @@ fi
 mkdir -p \
   data/crowdsec/config \
   data/crowdsec/data \
+  data/crowdsec/data/crs-plugins/custom \
   data/traefik/dynamic_conf \
   data/traefik/certs \
   data/traefik/logs \
@@ -76,6 +77,7 @@ copy_sample data/traefik/traefik.yml.sample data/traefik/traefik.yml
 copy_sample data/crowdsec/.env.sample data/crowdsec/.env
 copy_sample data/crowdsec/acquis.yaml.sample data/crowdsec/acquis.yaml
 copy_sample data/crowdsec/appsec.yaml.sample data/crowdsec/appsec.yaml
+copy_sample data/crowdsec/crs-plugins/custom/http-version-before.conf data/crowdsec/data/crs-plugins/custom/http-version-before.conf
 copy_sample data/traefik/.env.sample data/traefik/.env
 
 while IFS= read -r -d '' sample; do
