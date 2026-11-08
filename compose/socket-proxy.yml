@@ -1,6 +1,6 @@
 services:
   socket-proxy-authentik:
-    image: lscr.io/linuxserver/socket-proxy:latest
+    image: lscr.io/linuxserver/socket-proxy:${SOCKET_PROXY_TAG:-latest}
     container_name: socket-proxy-authentik
     restart: unless-stopped
     environment:
