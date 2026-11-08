@@ -44,7 +44,7 @@ services:
       - /run
 
   socket-proxy:
-    image: lscr.io/linuxserver/socket-proxy:latest
+    image: lscr.io/linuxserver/socket-proxy:${SOCKET_PROXY_TAG:-latest}
     container_name: socket-proxy
     environment:
       INFO: "1"
@@ -86,7 +86,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   socket-proxy-manager:
-    image: lscr.io/linuxserver/socket-proxy:latest
+    image: lscr.io/linuxserver/socket-proxy:${SOCKET_PROXY_TAG:-latest}
     container_name: socket-proxy-manager
     environment:
       INFO: "1"
