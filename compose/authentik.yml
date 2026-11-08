@@ -1,6 +1,6 @@
 services:
   postgresql:
-    image: postgres:16-alpine
+    image: postgres:${POSTGRES_TAG:-16-alpine}
     container_name: authentik-database
     env_file: ${ABSOLUTE_PATH}/.env
     environment:
