@@ -12,10 +12,12 @@ if ! docker compose version >/dev/null 2>&1; then
   echo "Docker Compose v2 ist nicht verfügbar." >&2
   exit 1
 fi
-if ! command -v openssl >/dev/null 2>&1; then
-  echo "OpenSSL wird zum Erzeugen der lokalen Schlüssel benötigt." >&2
-  exit 1
-fi
+for command_name in openssl python3; do
+  if ! command -v "$command_name" >/dev/null 2>&1; then
+    echo "$command_name wird für die Einrichtung benötigt." >&2
+    exit 1
+  fi
+done
 
 if [[ ! -f .env ]]; then
   cp .env.sample .env
@@ -64,6 +66,9 @@ mkdir -p \
   data/authentik/media \
   data/authentik/certs \
   data/authentik/custom-templates
+
+touch data/crowdsec/allowlist.txt
+chmod 600 data/crowdsec/allowlist.txt
 
 copy_sample() {
   local source="$1"
@@ -172,6 +177,58 @@ if [[ "$crowdsec_ready" != "true" ]]; then
   echo "CrowdSec wurde nicht rechtzeitig betriebsbereit." >&2
   ./scripts/compose.sh logs crowdsec
   exit 1
+fi
+
+# Centralized AllowLists require CrowdSec 1.6.8 or newer. The entries file is
+# bind-mounted read-only; the AllowList itself persists in CrowdSec's database.
+allowlist_name="installer_trusted_ips"
+if [[ -s data/crowdsec/allowlist.txt ]]; then
+  if ! ./scripts/compose.sh exec -T crowdsec cscli allowlists inspect "$allowlist_name" >/dev/null 2>&1; then
+    ./scripts/compose.sh exec -T crowdsec cscli allowlists create "$allowlist_name" \
+      --description "Trusted IP addresses and networks configured by the installer"
+  fi
+  existing_entries="$(./scripts/compose.sh exec -T crowdsec cscli allowlists inspect "$allowlist_name" --output json)"
+  allowlist_missing_file="$(mktemp)"
+  trap 'rm -f "$allowlist_missing_file"' EXIT
+  ALLOWLIST_FILE=data/crowdsec/allowlist.txt \
+  ALLOWLIST_JSON="$existing_entries" \
+  python3 - "$allowlist_missing_file" <<'PY'
+import json
+import os
+import sys
+
+with open(os.environ["ALLOWLIST_FILE"], encoding="utf-8") as source:
+    requested = list(dict.fromkeys(line.strip() for line in source if line.strip()))
+data = json.loads(os.environ["ALLOWLIST_JSON"])
+
+present = set()
+def collect_strings(value):
+    if isinstance(value, dict):
+        for nested in value.values():
+            collect_strings(nested)
+    elif isinstance(value, list):
+        for nested in value:
+            collect_strings(nested)
+    elif isinstance(value, str):
+        present.add(value)
+
+collect_strings(data)
+with open(sys.argv[1], "w", encoding="utf-8") as output:
+    for value in requested:
+        if value not in present:
+            output.write(value + "\n")
+PY
+
+mapfile -t allowlist_missing < "$allowlist_missing_file"
+if ((${#allowlist_missing[@]})); then
+  ./scripts/compose.sh exec -T crowdsec cscli allowlists add \
+    "$allowlist_name" "${allowlist_missing[@]}"
+fi
+echo "CrowdSec-AllowList eingerichtet ($(wc -l < data/crowdsec/allowlist.txt | tr -d ' ') Einträge konfiguriert)."
+rm -f "$allowlist_missing_file"
+trap - EXIT
+else
+  echo "CrowdSec-AllowList übersprungen (keine Einträge konfiguriert)."
 fi
 
 ./scripts/compose.sh exec -T crowdsec cscli bouncers delete TRAEFIK --ignore-missing >/dev/null

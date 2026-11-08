@@ -251,6 +251,19 @@ docker-compose.yml        Root-Datei, die die Fragmente zusammenführt
 first_install.sh          Interaktive Erstinstallation
 ```
 
+## CrowdSec-AllowList
+
+Während `./first_install.sh` kannst du IP-Adressen und CIDR-Netze eingeben,
+die CrowdSec dauerhaft zulassen soll. Trenne mehrere Werte durch Kommas,
+Semikolons oder Leerzeichen, zum Beispiel `192.168.1.10, 2001:db8::5;
+10.0.0.0/8`. Leere Eingabe ist erlaubt. IPv4 und IPv6 werden geprüft; CIDR-Netze
+müssen kanonisch angegeben werden. Die Werte werden in
+`data/crowdsec/allowlist.txt` gespeichert und beim Setup in die zentrale
+CrowdSec-AllowList `installer_trusted_ips` übernommen. CrowdSec speichert diese
+AllowList in seiner persistent eingebundenen Datenbank; wiederholtes Setup fügt
+bereits vorhandene Einträge nicht erneut hinzu. Die Funktion benötigt CrowdSec
+1.6.8 oder neuer.
+
 ## CrowdSec AppSec: HTTP/3 erlauben
 
 Der Stack enthält eine eigene CRS-Plugin-Regel, die HTTP/3 in der vorhandenen

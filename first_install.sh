@@ -15,7 +15,7 @@ if ! docker info >/dev/null 2>&1; then
   echo "Der Docker-Daemon ist nicht erreichbar. Starte Docker oder prüfe deine Berechtigungen." >&2
   exit 1
 fi
-for command_name in openssl sed; do
+for command_name in openssl sed python3; do
   if ! command -v "$command_name" >/dev/null 2>&1; then
     echo "$command_name wird für die Erstinstallation benötigt." >&2
     exit 1
@@ -109,6 +109,46 @@ prompt_env TRAEFIK_CERT_WILDCARD "Wildcard-Domain (z. B. *.example.de)"
 prompt_env AUTHENTIK_HOST "Authentik-Hostname"
 prompt_env TRAEFIK_HOST "Traefik-Dashboard-Hostname"
 prompt_env CROWDSEC_MANAGER_HOST "CrowdSec-Manager-Hostname"
+
+echo
+echo "CrowdSec-AllowList"
+echo "IP-Adressen und CIDR-Netze, die CrowdSec immer zulassen soll."
+echo "Mehrere Einträge mit Komma, Leerzeichen oder Semikolon trennen."
+echo "Beispiele: 192.168.1.10, 2001:db8::5; 10.0.0.0/8 2001:db8:1234::/48"
+echo "Leer lassen, wenn keine Ausnahmen benötigt werden."
+allowlist_file="$PROJECT_DIR/data/crowdsec/allowlist.txt"
+read -r -p "AllowList-Einträge: " allowlist_answer
+allowlist_temp="$(mktemp "${allowlist_file}.XXXXXX")"
+if ! ALLOWLIST_INPUT="$allowlist_answer" python3 - "$allowlist_temp" <<'PY'
+import ipaddress
+import os
+import re
+import sys
+
+raw = os.environ["ALLOWLIST_INPUT"]
+tokens = [part for part in re.split(r"[,;\s]+", raw.strip()) if part]
+valid = []
+for token in tokens:
+    try:
+        # Strict networks prevent silently broadening a user supplied range.
+        if "/" in token:
+            value = str(ipaddress.ip_network(token, strict=True))
+        else:
+            value = str(ipaddress.ip_address(token))
+    except ValueError:
+        print(f"Ungültige IP-Adresse oder CIDR-Netz: {token}", file=sys.stderr)
+        sys.exit(1)
+    if value not in valid:
+        valid.append(value)
+with open(sys.argv[1], "w", encoding="utf-8") as output:
+    output.write("".join(value + "\n" for value in valid))
+PY
+then
+  rm -f "$allowlist_temp"
+  exit 1
+fi
+chmod 600 "$allowlist_temp"
+mv "$allowlist_temp" "$allowlist_file"
 
 echo
 echo "CrowdSec CAPTCHA-Einstellungen"
