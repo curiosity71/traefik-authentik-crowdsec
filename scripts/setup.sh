@@ -181,3 +181,4 @@ echo "Starte den Stack ..."
 ./scripts/compose.sh up -d --remove-orphans
 echo "Stack gestartet. Authentik: https://$(sed -n 's/^AUTHENTIK_HOST=//p' .env | head -n 1)"
 echo "Traefik-Dashboard: https://$(sed -n 's/^TRAEFIK_HOST=//p' .env | head -n 1)"
+echo "CrowdSec-Manager: https://$(sed -n 's/^CROWDSEC_MANAGER_HOST=//p' .env | head -n 1)"
