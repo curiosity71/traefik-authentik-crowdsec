@@ -1,6 +1,6 @@
 services:
   crowdsec-manager:
-    image: hhftechnology/crowdsec-manager:independent
+    image: hhftechnology/crowdsec-manager:${CROWDSEC_MANAGER_TAG:-independent}
     container_name: crowdsec-manager
     restart: unless-stopped
     labels:
