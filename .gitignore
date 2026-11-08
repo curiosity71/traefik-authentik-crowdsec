@@ -66,6 +66,7 @@ acme_cloudflare.json
 acme_desec.json
 acme.json
 !.sample
+allowlist.txt
 
 docs/
 docs/images/authentik-forward-auth
