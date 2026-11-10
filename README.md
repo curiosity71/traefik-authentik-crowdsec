@@ -25,7 +25,7 @@ Die Compose-Konfiguration liegt in `compose/` und wird über [`docker-compose.ym
 ## Voraussetzungen
 
 - Docker Engine und Docker Compose v2 mit Unterstützung für Compose `include`
-- Bash und OpenSSL
+- Bash, OpenSSL und Python 3
 - `curl`, falls Cloudflare-IP-Netze für Forwarded Headers aktiviert werden
 - Zugriff des aktuellen Benutzers auf den Docker-Daemon
 - Freie Ports 443/TCP und 443/UDP auf dem Host
@@ -52,7 +52,7 @@ Das Skript erstellt `.env`, falls die Datei noch fehlt, und fragt anschließend 
 7. ob Cloudflare-Proxy-IP-Netze als vertrauenswürdige Forwarded Headers gelten sollen
 8. Cloudflare- oder deSEC-API-Token, wenn der entsprechende DNS-Resolver gewählt wurde
 
-API-Tokens und der CAPTCHA-Secret-Key werden verdeckt eingelesen; CAPTCHA-Provider und Schlüssel stehen in `.env`, die mit Dateirechten `600` geschützt ist. Bereits vorhandene Werte und lokale Konfigurationsdateien bleiben erhalten. Das Setup erzeugt fehlende Schlüssel und Vorlagen, übernimmt die CAPTCHA-Einstellungen in die CrowdSec-Traefik-Konfiguration, registriert den Traefik-Bouncer bei CrowdSec und startet anschließend den Stack.
+API-Tokens und der CAPTCHA-Secret-Key werden verdeckt eingelesen; CAPTCHA-Provider, Site-Key und Secret-Key stehen in `.env`, die mit Dateirechten `600` geschützt ist. Der Site-Key wird sichtbar, der Secret-Key verdeckt eingelesen. Bereits vorhandene Werte und lokale Konfigurationsdateien bleiben erhalten. Das Setup erzeugt fehlende Schlüssel und Vorlagen, übernimmt die CAPTCHA-Einstellungen in die CrowdSec-Traefik-Konfiguration, registriert den Traefik-Bouncer bei CrowdSec und startet anschließend den Stack.
 
 Wenn du die Cloudflare-Proxy-Netze aktivierst, lädt das Skript die aktuellen
 IPv4- und IPv6-Präfixe von [Cloudflare IPv4](https://www.cloudflare.com/ips-v4)
