@@ -264,6 +264,11 @@ AllowList in seiner persistent eingebundenen Datenbank; wiederholtes Setup fügt
 bereits vorhandene Einträge nicht erneut hinzu. Die Funktion benötigt CrowdSec
 1.6.8 oder neuer.
 
+Trage außerdem mindestens die IP-Adresse des Clients in die AllowList ein,
+von dem aus du in Authentik Anwendungen anlegst. Andernfalls kann CrowdSec
+Anfragen von diesem Client blockieren. Bereits erstellte Entscheidungen
+(Decisions) für diese IP lassen sich anschließend im CrowdSec Manager löschen.
+
 ## CrowdSec AppSec: HTTP/3 erlauben
 
 Der Stack enthält eine eigene CRS-Plugin-Regel, die HTTP/3 in der vorhandenen
