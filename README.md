@@ -43,13 +43,14 @@ Im Projektverzeichnis ausführen:
 
 Das Skript erstellt `.env`, falls die Datei noch fehlt, und fragt anschließend folgende Werte ab. Eine leere Eingabe übernimmt den angezeigten Vorgabewert:
 
-- Zertifikatresolver: `cloudflare_resolver`, `desec_resolver` oder `letsencrypt`
-- E-Mail-Adresse für ACME-Zertifikate
-- Zertifikatsdomain und Wildcard-Domain
-- Authentik-, Traefik- und CrowdSec-Manager-Hostname
-- CAPTCHA-Provider für CrowdSec (`hcaptcha`, `recaptcha`, `turnstile` oder deaktiviert); bei Auswahl eines Providers fragt das Skript Site-Key und Secret-Key ab
-- Cloudflare- oder deSEC-API-Token, wenn der entsprechende DNS-Resolver gewählt wurde
-- ob Cloudflare-Proxy-IP-Netze als vertrauenswürdige Forwarded Headers gelten sollen
+1. Zertifikatresolver: `cloudflare_resolver`, `desec_resolver` oder `letsencrypt`
+2. E-Mail-Adresse für ACME-Zertifikate
+3. Zertifikatsdomain und Wildcard-Domain
+4. Authentik-, Traefik- und CrowdSec-Manager-Hostname
+5. CrowdSec-AllowList: IP-Adressen und CIDR-Netze, die CrowdSec dauerhaft zulassen soll
+6. CAPTCHA-Provider für CrowdSec (`hcaptcha`, `recaptcha`, `turnstile` oder deaktiviert); bei Auswahl eines Providers fragt das Skript Site-Key und Secret-Key ab
+7. ob Cloudflare-Proxy-IP-Netze als vertrauenswürdige Forwarded Headers gelten sollen
+8. Cloudflare- oder deSEC-API-Token, wenn der entsprechende DNS-Resolver gewählt wurde
 
 API-Tokens und der CAPTCHA-Secret-Key werden verdeckt eingelesen; CAPTCHA-Provider und Schlüssel stehen in `.env`, die mit Dateirechten `600` geschützt ist. Bereits vorhandene Werte und lokale Konfigurationsdateien bleiben erhalten. Das Setup erzeugt fehlende Schlüssel und Vorlagen, übernimmt die CAPTCHA-Einstellungen in die CrowdSec-Traefik-Konfiguration, registriert den Traefik-Bouncer bei CrowdSec und startet anschließend den Stack.
 
