@@ -1,47 +1,102 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
-<defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#64748b"/></marker><marker id="g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#16a34a"/></marker><marker id="b" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/></marker><style>text{font-family:Arial,sans-serif;fill:#172033}.title{font-size:27px;font-weight:700}.sub{font-size:15px;fill:#475569}.head{font-size:18px;font-weight:700}.body{font-size:14px}.small{font-size:12px;fill:#475569}.box{stroke-width:2;rx:14}.edge{fill:none;stroke:#64748b;stroke-width:2.3;marker-end:url(#a)}.auth{fill:none;stroke:#16a34a;stroke-width:2.6;marker-end:url(#g)}.mon{fill:none;stroke:#2563eb;stroke-width:2.6;marker-end:url(#b)}</style></defs>
-<rect width="1200" height="760" fill="#f8fafc"/>
-<text x="600" y="48" text-anchor="middle" class="title">So arbeitet der Traefik-, Authentik- und CrowdSec-Stack</text>
-<text x="600" y="75" text-anchor="middle" class="sub">Zugriff von außen · zentrale Anmeldung · Erkennung und Abwehr</text>
-<!-- user and edge -->
-<rect x="42" y="180" width="170" height="95" fill="#fff" stroke="#94a3b8" class="box"/>
-<text x="127" y="213" text-anchor="middle" class="head">Nutzer / Client</text><text x="127" y="239" text-anchor="middle" class="body">HTTPS · TCP/UDP 443</text><text x="127" y="259" text-anchor="middle" class="small">Webdienste und Dashboards</text>
-<rect x="290" y="165" width="220" height="125" fill="#e0f2fe" stroke="#0284c7" class="box"/>
-<text x="400" y="202" text-anchor="middle" class="head">Traefik</text><text x="400" y="228" text-anchor="middle" class="body">TLS · Zertifikate · Routing</text><text x="400" y="251" text-anchor="middle" class="small">Docker- und Dateiprovider</text><text x="400" y="271" text-anchor="middle" class="small">Bouncer prüft CrowdSec-Entscheide</text>
-<path d="M212 227 H286" class="edge"/>
-<!-- authentik -->
-<rect x="595" y="105" width="240" height="125" fill="#dcfce7" stroke="#16a34a" class="box"/>
-<text x="715" y="141" text-anchor="middle" class="head">Authentik</text><text x="715" y="168" text-anchor="middle" class="body">Login und Forward Auth</text><text x="715" y="191" text-anchor="middle" class="small">Server + Worker</text><text x="715" y="211" text-anchor="middle" class="small">Identitäten und Richtlinien</text>
-<rect x="900" y="110" width="220" height="95" fill="#f0fdf4" stroke="#4ade80" class="box"/>
-<text x="1010" y="146" text-anchor="middle" class="head">PostgreSQL</text><text x="1010" y="173" text-anchor="middle" class="body">Authentik-Datenbank</text>
-<path d="M835 166 H896" class="edge"/>
-<path d="M400 161 C440 80 520 80 590 135" class="auth"/>
-<text x="487" y="101" text-anchor="middle" class="small">1 · geschützte Route fragt Anmeldung an</text>
-<path d="M590 191 C520 308 445 320 400 292" class="auth"/>
-<text x="492" y="316" text-anchor="middle" class="small">2 · erlaubt oder leitet zum Login weiter</text>
-<!-- services -->
-<rect x="290" y="390" width="220" height="100" fill="#fff" stroke="#94a3b8" class="box"/>
-<text x="400" y="427" text-anchor="middle" class="head">Webdienst</text><text x="400" y="454" text-anchor="middle" class="body">im Docker-Netzwerk „proxy“</text><text x="400" y="475" text-anchor="middle" class="small">Antwort zurück über Traefik</text>
-<path d="M400 291 V385" class="edge"/><text x="415" y="350" class="small">3 · Weiterleitung</text>
-<rect x="42" y="397" width="170" height="86" fill="#fff" stroke="#94a3b8" class="box"/>
-<text x="127" y="431" text-anchor="middle" class="head">Login-Seite</text><text x="127" y="458" text-anchor="middle" class="body">auth.example…</text>
-<path d="M593 207 C553 351 340 354 212 429" class="auth"/><text x="496" y="367" class="small">Anmeldung im Browser</text>
-<!-- crowdsec -->
-<rect x="595" y="390" width="240" height="115" fill="#ffedd5" stroke="#f97316" class="box"/>
-<text x="715" y="427" text-anchor="middle" class="head">CrowdSec</text><text x="715" y="453" text-anchor="middle" class="body">liest Traefik-Logs</text><text x="715" y="476" text-anchor="middle" class="small">Erkennung · AppSec/WAF · Entscheidungen</text>
-<path d="M510 452 H590" class="mon"/><text x="550" y="438" text-anchor="middle" class="small">Logs</text>
-<path d="M600 404 C560 345 495 300 490 282" class="mon"/><text x="545" y="337" class="small">Entscheide</text>
-<rect x="900" y="400" width="220" height="95" fill="#fff7ed" stroke="#fb923c" class="box"/>
-<text x="1010" y="436" text-anchor="middle" class="head">CrowdSec Manager</text><text x="1010" y="463" text-anchor="middle" class="body">Verwaltung per Web</text><text x="1010" y="483" text-anchor="middle" class="small">Zugriff via Traefik + Authentik</text>
-<path d="M835 447 H896" class="edge"/>
-<!-- docker API -->
-<rect x="45" y="590" width="245" height="105" fill="#f1f5f9" stroke="#64748b" class="box"/>
-<text x="167" y="626" text-anchor="middle" class="head">Docker-Daemon</text><text x="167" y="652" text-anchor="middle" class="body">Container-API</text><text x="167" y="674" text-anchor="middle" class="small">Socket bleibt ohne Host-Port</text>
-<rect x="360" y="570" width="265" height="140" fill="#f1f5f9" stroke="#64748b" class="box"/>
-<text x="492" y="603" text-anchor="middle" class="head">Getrennte Socket-Proxys</text><text x="492" y="632" text-anchor="middle" class="body">Traefik / CrowdSec: lesender Zugriff</text><text x="492" y="658" text-anchor="middle" class="body">Authentik: Container verwalten</text><text x="492" y="684" text-anchor="middle" class="body">Manager: Logs und Admin-Aktionen</text>
-<path d="M290 641 H356" class="edge"/>
-<path d="M400 290 C350 450 400 500 450 566" class="edge"/>
-<path d="M715 506 C690 535 625 558 600 572" class="edge"/>
-<path d="M1010 496 C940 560 760 608 629 628" class="edge"/>
-<text x="600" y="737" text-anchor="middle" class="small">Socket-Proxys begrenzen Docker-API-Zugriffe; sie sind nur intern erreichbar.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1000" viewBox="0 0 1440 1000" role="img" aria-labelledby="title desc">
+<title id="title">Architektur des Traefik-, Authentik- und CrowdSec-Stacks</title>
+<desc id="desc">Übersicht des HTTPS-Anfragewegs über Traefik, Authentik-Forward-Auth und CrowdSec sowie der getrennten internen Docker-Socket-Proxys.</desc>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#64748b"/></marker>
+  <marker id="greenArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16845b"/></marker>
+  <marker id="orangeArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#d97706"/></marker>
+  <marker id="blueArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2563eb"/></marker>
+  <style>
+    text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;fill:#172033}
+    .title{font-size:32px;font-weight:750;letter-spacing:-.5px}.subtitle{font-size:16px;fill:#64748b}
+    .section{font-size:14px;font-weight:700;letter-spacing:1.2px;fill:#64748b}
+    .name{font-size:19px;font-weight:700}.copy{font-size:14px;fill:#475569}.tiny{font-size:12px;fill:#64748b}
+    .number{font-size:12px;font-weight:700;fill:#fff}.pill{font-size:12px;font-weight:650}
+    .card{stroke-width:1.5}.flow{fill:none;stroke:#64748b;stroke-width:2.5;marker-end:url(#arrow)}
+    .authflow{fill:none;stroke:#16845b;stroke-width:2.5;marker-end:url(#greenArrow)}
+    .securityflow{fill:none;stroke:#d97706;stroke-width:2.5;marker-end:url(#orangeArrow)}
+    .controlflow{fill:none;stroke:#2563eb;stroke-width:2;marker-end:url(#blueArrow)}
+  </style>
+</defs>
+<rect width="1440" height="1000" fill="#f5f7fb"/>
+<text x="72" y="76" class="title">So arbeitet der Stack</text>
+<text x="72" y="106" class="subtitle">Sicherer Webzugriff mit Traefik, Authentik und CrowdSec</text>
+
+<!-- Public request path -->
+<rect x="56" y="142" width="1328" height="350" rx="24" fill="#fff" stroke="#e2e8f0"/>
+<text x="88" y="184" class="section">1 · ÖFFENTLICHER ANFRAGEWEG</text>
+<rect x="88" y="248" width="210" height="112" rx="18" fill="#f8fafc" stroke="#cbd5e1" class="card"/>
+<circle cx="118" cy="278" r="16" fill="#64748b"/><text x="118" y="282" text-anchor="middle" class="number">1</text>
+<text x="145" y="283" class="name">Nutzer</text>
+<text x="112" y="320" class="copy">Browser oder Client</text>
+<text x="112" y="343" class="tiny">HTTPS · Port 443</text>
+
+<rect x="434" y="226" width="290" height="156" rx="20" fill="#eaf4ff" stroke="#60a5fa" class="card"/>
+<circle cx="468" cy="259" r="16" fill="#2563eb"/><text x="468" y="263" text-anchor="middle" class="number">2</text>
+<text x="496" y="265" class="name">Traefik</text>
+<text x="462" y="301" class="copy">TLS und Zertifikate</text>
+<text x="462" y="324" class="copy">Routing zu Diensten</text>
+<rect x="462" y="342" width="224" height="24" rx="12" fill="#dbeafe"/><text x="574" y="359" text-anchor="middle" class="pill" fill="#1d4ed8">Forward-Auth · CrowdSec-Bouncer</text>
+
+<rect x="890" y="248" width="250" height="112" rx="18" fill="#f8fafc" stroke="#cbd5e1" class="card"/>
+<circle cx="920" cy="278" r="16" fill="#64748b"/><text x="920" y="282" text-anchor="middle" class="number">3</text>
+<text x="948" y="283" class="name">Webdienst</text>
+<text x="914" y="320" class="copy">Container im Netzwerk</text>
+<text x="914" y="343" class="tiny">proxy · Antwort über Traefik</text>
+
+<path d="M300 304H428" class="flow"/>
+<path d="M726 304H884" class="flow"/>
+<rect x="330" y="278" width="78" height="24" rx="12" fill="#f1f5f9"/><text x="369" y="295" text-anchor="middle" class="pill">HTTPS</text>
+<rect x="772" y="278" width="92" height="24" rx="12" fill="#f1f5f9"/><text x="818" y="295" text-anchor="middle" class="pill">Weiterleitung</text>
+
+<!-- Auth lane -->
+<rect x="434" y="404" width="290" height="62" rx="15" fill="#ecfdf5" stroke="#86efac" class="card"/>
+<text x="458" y="431" class="name" font-size="17">Authentik</text>
+<text x="458" y="452" class="tiny">Server + Worker · Identitäten · PostgreSQL</text>
+<path d="M579 399V386" class="authflow"/>
+<path d="M558 382C520 397 492 397 472 382" class="authflow"/>
+<rect x="744" y="396" width="312" height="36" rx="18" fill="#dcfce7"/><text x="900" y="419" text-anchor="middle" class="pill">Geschützte Route fragt Login an · Erlaubnis zurück</text>
+<text x="88" y="445" class="tiny">Öffentliche Anmeldung und geschützte Apps laufen über eigene Hostnamen.</text>
+
+<!-- Security -->
+<rect x="56" y="520" width="1328" height="210" rx="24" fill="#fff" stroke="#e2e8f0"/>
+<text x="88" y="562" class="section">2 · ERKENNUNG UND ABWEHR</text>
+<rect x="434" y="588" width="290" height="102" rx="18" fill="#fff7ed" stroke="#fdba74" class="card"/>
+<text x="462" y="623" class="name">CrowdSec</text>
+<text x="462" y="651" class="copy">Analysiert Traefik-Logs</text>
+<text x="462" y="674" class="tiny">Szenarien · AppSec/WAF · Entscheidungen</text>
+<rect x="890" y="588" width="250" height="102" rx="18" fill="#fffbeb" stroke="#fcd34d" class="card"/>
+<text x="918" y="623" class="name">CrowdSec-Bouncer</text>
+<text x="918" y="651" class="copy">Prüft Entscheidungen</text>
+<text x="918" y="674" class="tiny">Traefik blockiert unerwünschte Anfragen</text>
+<path d="M724 626H884" class="securityflow"/>
+<text x="804" y="613" text-anchor="middle" class="tiny">Entscheidungen</text>
+<path d="M579 583V475C579 454 579 421 579 384" fill="none" stroke="#d97706" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#orangeArrow)"/>
+<rect x="126" y="618" width="222" height="56" rx="14" fill="#f8fafc" stroke="#cbd5e1" class="card"/>
+<text x="150" y="643" class="copy" font-weight="700">Traefik-Logs</text><text x="150" y="662" class="tiny">Eingabe für CrowdSec</text>
+<path d="M350 646H428" class="securityflow"/>
+<text x="389" y="633" text-anchor="middle" class="tiny">Logs</text>
+
+<!-- Internal Docker control -->
+<rect x="56" y="758" width="1328" height="188" rx="24" fill="#fff" stroke="#e2e8f0"/>
+<text x="88" y="800" class="section">3 · INTERNE DOCKER-VERWALTUNG</text>
+<text x="88" y="828" class="tiny">Getrennte Proxys begrenzen den Zugriff auf die Docker-API. Sie veröffentlichen keinen Host-Port.</text>
+<rect x="88" y="850" width="255" height="66" rx="15" fill="#f8fafc" stroke="#cbd5e1" class="card"/>
+<text x="112" y="878" class="name" font-size="16">Docker-Daemon</text><text x="112" y="900" class="tiny">Container-API</text>
+<rect x="477" y="842" width="340" height="82" rx="16" fill="#eff6ff" stroke="#93c5fd" class="card"/>
+<text x="501" y="871" class="name" font-size="16">Getrennte Socket-Proxys</text>
+<text x="501" y="897" class="tiny">Traefik/CrowdSec · Authentik · Manager</text>
+<path d="M348 883H471" class="controlflow"/>
+<rect x="962" y="842" width="354" height="82" rx="16" fill="#f8fafc" stroke="#cbd5e1" class="card"/>
+<text x="986" y="871" class="name" font-size="16">Interne Dienste</text>
+<text x="986" y="897" class="tiny">Authentik verwaltet Outposts · Manager administriert</text>
+<path d="M821 883H956" class="controlflow"/>
+<text x="887" y="869" text-anchor="middle" class="tiny">begrenzte API</text>
+
+<!-- Legend -->
+<circle cx="90" cy="970" r="5" fill="#64748b"/><text x="104" y="975" class="tiny">Webanfrage</text>
+<circle cx="230" cy="970" r="5" fill="#16845b"/><text x="244" y="975" class="tiny">Anmeldung</text>
+<circle cx="365" cy="970" r="5" fill="#d97706"/><text x="379" y="975" class="tiny">Sicherheitsdaten</text>
+<circle cx="535" cy="970" r="5" fill="#2563eb"/><text x="549" y="975" class="tiny">interne Docker-API</text>
+<text x="1352" y="975" text-anchor="end" class="tiny">Traefik · Authentik · CrowdSec</text>
 </svg>
