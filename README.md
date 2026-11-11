@@ -270,16 +270,26 @@ von dem aus du in Authentik Anwendungen anlegst. Andernfalls kann CrowdSec
 Anfragen von diesem Client blockieren. Bereits erstellte Entscheidungen
 (Decisions) für diese IP lassen sich anschließend im CrowdSec Manager löschen.
 
-Alternativ kann auch `tx.allowed_methods=GET HEAD POST OPTIONS` für Authentik
-erweitert werden. Erstelle dazu die Datei `data/crowdsec/data/crs-plugins/authentik/authentik-before.conf`
+Alternativ kann auch `tx.allowed_methods=GET HEAD POST OPTIONS` für Authentik und 
+Crowdsec-Manager erweitert werden. Erstelle dazu die Datei 
+`data/crowdsec/data/crs-plugins/authentik/authentik-before.conf` und passe die URLs an.
 
 ```conf
+# Authentik - Anwendungen erstellen und löschen
 SecRule SERVER_NAME "@streq authentik.example.de" \
     "id:9901001,\
     phase:1,\
     pass,\
     nolog,\
     setvar:'tx.allowed_methods=GET HEAD POST OPTIONS PUT DELETE'"
+
+# CrowdSec Manager - Decisions löschen
+SecRule SERVER_NAME "@streq crowdsec.example.de" \
+    "id:9901002,\
+    phase:1,\
+    pass,\
+    nolog,\
+    setvar:'tx.allowed_methods=GET HEAD POST OPTIONS DELETE'"
 ```
 
 ## CrowdSec AppSec: HTTP/3 erlauben
