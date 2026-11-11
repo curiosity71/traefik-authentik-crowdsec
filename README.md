@@ -270,6 +270,18 @@ von dem aus du in Authentik Anwendungen anlegst. Andernfalls kann CrowdSec
 Anfragen von diesem Client blockieren. Bereits erstellte Entscheidungen
 (Decisions) für diese IP lassen sich anschließend im CrowdSec Manager löschen.
 
+Alternativ kann auch `tx.allowed_methods=GET HEAD POST OPTIONS` für Authentik
+erweitert werden. Erstelle dazu die Datei `data/crowdsec/data/crs-plugins/authentik/authentik-before.conf`
+
+```conf
+SecRule SERVER_NAME "@streq authentik.example.de" \
+    "id:9901001,\
+    phase:1,\
+    pass,\
+    nolog,\
+    setvar:'tx.allowed_methods=GET HEAD POST OPTIONS PUT DELETE'"
+```
+
 ## CrowdSec AppSec: HTTP/3 erlauben
 
 Der Stack enthält eine eigene CRS-Plugin-Regel, die HTTP/3 in der vorhandenen
